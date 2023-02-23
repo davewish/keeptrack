@@ -2,7 +2,7 @@ export class Project {
   id: number | undefined;
 
   name: string = '';
-  descripton: string = '';
+  description: string = '';
   imageUrl: string = '';
   contractTypeId: number | undefined;
   contactSignOn: Date = new Date();
@@ -17,7 +17,7 @@ export class Project {
     if (!initialize) return;
     if (initialize.id) this.id = initialize.id;
     if (initialize.name) this.name = initialize.name;
-    if (initialize.descripton) this.descripton = initialize.descripton;
+    if (initialize.description) this.description = initialize.description;
     if (initialize.imageUrl) this.imageUrl = initialize.imageUrl;
     if (initialize.contractTypeId)
       this.contractTypeId = initialize.contractTypeId;
