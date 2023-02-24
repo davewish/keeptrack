@@ -1,10 +1,17 @@
 
 import PropTypes from "prop-types"
 import { Project } from "./Project"
-function ProjectCard({project ,onEdit}) {
 
 
-    function getDescription(description) {
+interface ProjectCardProps {
+    project:Project,
+    onEdit:(project:Project)=>void
+}
+
+function ProjectCard({project ,onEdit}:ProjectCardProps) {
+
+
+    function getDescription(description:string) {
         return description.substring(0,60) + "..."
  }
 
@@ -36,8 +43,6 @@ return (
     
 }
 
-ProjectCard.propTypes={
-    project:PropTypes.instanceOf(Project).isRequired
-}
+
 
 export default ProjectCard

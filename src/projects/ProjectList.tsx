@@ -6,11 +6,14 @@ import { Project } from "./Project"
 import ProjectCard from "./ProjectCard"
 import ProjectForm from "./ProjectForm"
 
-interface ProjectList {
+interface ProjectListProps {
     projects:Project[];
+    saveProject:(project:Project)=>void
+
+
 }
 
-function ProjectList({projects}:ProjectList) {
+function ProjectList({projects, saveProject}:ProjectListProps) {
  const [projectBeingEdited ,setProjectBeingEdited]=useState({});
 
 
@@ -21,8 +24,9 @@ function ProjectList({projects}:ProjectList) {
  const handleCancel=()=> {
     setProjectBeingEdited({})
  }
+
  const handleSave=(project:Project)=> {
- alert("saved")
+ saveProject(project)
  }
 
     return (
@@ -32,7 +36,7 @@ function ProjectList({projects}:ProjectList) {
                 className="col-sm">
                     {
                         project===projectBeingEdited ?
-                        <ProjectForm onCancel={handleCancel} onSave={handleSave}/> :
+                        <ProjectForm  project={project} onCancel={handleCancel} onSave={handleSave}/> :
                         <ProjectCard project={project } onEdit={handleEdit}></ProjectCard>
 
                     }
