@@ -1,5 +1,6 @@
 
 import PropTypes from "prop-types"
+import { Link } from "react-router-dom"
 import { Project } from "./Project"
 
 
@@ -24,11 +25,13 @@ return (
     }
     />
     <section className="section dark">
+    <Link to={'/projects/' + project.id}>
         <h5 className="strong">
             {project.name}
         </h5>
         <p>{getDescription(project.description)}</p>
         <p> Budget: {project.budget.toLocaleString()}</p>
+        </Link>
 
         <button className="bordered" onClick={()=>onEdit(project)
         }>

@@ -55,9 +55,9 @@ function convertToProjectModel(item: any): Project {
 }
 
 const ProjectAPI = {
-  get(page = 1, limit = 20) {
+  get(page = 1, limit = 10) {
     return fetch(`${URL}?_page=${page}&_limit=${limit}&_sort=name`)
-      .then(delay(2000))
+      .then(delay(1000))
       .then(checkStatus)
       .then(parseJSON)
       .then(convertToProjectModels)
@@ -85,6 +85,12 @@ const ProjectAPI = {
           'There was an error updating the project. Please try again.'
         );
       });
+  },
+  find(id: number) {
+    return fetch(`${URL}/${id}`)
+      .then(checkStatus)
+      .then(parseJSON)
+      .then(convertToProjectModel);
   }
 };
 
