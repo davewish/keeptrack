@@ -3,6 +3,12 @@ import { Project } from './Project';
 
 import PropTypes from 'prop-types';
 import { useSaveProject } from './projectHooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { ProjectState } from './state/projectTypes';
+import { saveProject } from './state/projectActions';
+import { AppState } from '../state';
 
 interface ProjectFormProps {
   project: Project;
@@ -27,7 +33,11 @@ function ProjectForm({
     budget: ''
   });
 
-  const { mutate: saveProject, isLoading } = useSaveProject();
+  const loading = useSelector(
+    (appState: AppState) => appState.projectState.loading
+  );
+
+  const dispatch=useDispatch<ThunkDispatch<ProjectState,any,AnyAction>>()
 
   const validate = (project: Project) :Error=> {
     
@@ -63,7 +73,7 @@ function ProjectForm({
 
     console.log("error", error)
      if(!isValid()) return ;
-     saveProject(project)
+     dispatch(saveProject(project))
    
   };
 
@@ -95,7 +105,7 @@ function ProjectForm({
 
   return (
     <form className="input-group vertical" onSubmit={handleSubmit}>
-      {isLoading && <span className="toast">Saving...</span>}
+      {loading ?<span className="toast">Saving...</span>:null}
       <label htmlFor="name">Project Name</label>
       <input
         type="text"

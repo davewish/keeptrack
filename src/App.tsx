@@ -15,13 +15,15 @@ import {
 } from 'react-router-dom';
 import Home from './home/home';
 import ProjectPage from './projects/ProjectPage';
+import { Provider } from 'react-redux';
+import { store } from './state';
 
-import {QueryClientProvider,QueryClient} from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools';
 
 function App() {
   return (
-    <Router>
+    <Provider store={store}>
+
+<Router>
       <header className="sticky">
         <span className="logo">
           <img src="/assets/logo-3.svg" alt="logo" width="49" height="99" />
@@ -43,6 +45,8 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </Provider>
+   
   );
 }
 

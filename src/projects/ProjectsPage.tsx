@@ -1,46 +1,73 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppState } from '../state';
 import { useProjects } from './projectHooks';
 import ProjectList from './ProjectList';
+import { loadProjects } from './state/projectActions';
+import { ProjectState } from './state/projectTypes';
 
 function ProjectsPage() {
-  const {
-    data,
-    isLoading,
-    error,
-    isError,
-    isFetching,
-    page,
-    setPage,
-    isPreviousData,
-  } = useProjects();
+  // const {
+  //   data,
+  //   isLoading,
+  //   error,
+  //   isError,
+  //   isFetching,
+  //   page,
+  //   setPage,
+  //   isPreviousData,
+  // } = useProjects();
+
+  const loading = useSelector(
+    (appState: AppState) => appState.projectState.loading
+  );
+
+  const projects = useSelector(
+    (appState: AppState) => appState.projectState.projects
+  );
+
+  const  currentPage = useSelector(
+    (appState: AppState) => appState.projectState.page
+  );
+  const error = useSelector(
+    (appState: AppState) => appState.projectState.error
+  );
+
+  const dispatch=useDispatch<ThunkDispatch<ProjectState,any,AnyAction>>()
+
+  useEffect(()=> {
+    dispatch(loadProjects(currentPage +1))
+
+  },[dispatch])
 
   return (
     <>
       <h1>Projects</h1>
 
-      {data ? (
+      {projects? (
         <>
-          {isFetching && <span className="toast">Refreshing...</span>}
-          <ProjectList projects={data} />
+          {loading ? <span className="toast">Refreshing...</span>:null}
+          <ProjectList projects={projects} />
           <div className="row">
-            <div className="col-sm-4">Current page: {page + 1}</div>
+            <div className="col-sm-4">Current page: {currentPage}</div>
             <div className="col-sm-4">
               <div className="button-group right">
                 <button
                   className="button "
-                  onClick={() => setPage((oldPage) => oldPage - 1)}
-                  disabled={page === 0}
+                 onClick={() => dispatch(loadProjects(currentPage-1))}
+                  disabled={currentPage === 0}
                 >
                   Previous
                 </button>
                 <button
                   className="button"
-                  onClick={() => {
-                    if (!isPreviousData) {
-                      setPage((oldPage) => oldPage + 1);
-                    }
-                  }}
-                  disabled={data.length != 10}
+                   onClick={() => {
+                    dispatch(loadProjects(currentPage+1))
+                   }}
+                  disabled={currentPage == 10}
                 >
                   Next
                 </button>
@@ -48,18 +75,18 @@ function ProjectsPage() {
             </div>
           </div>
         </>
-      ) : isLoading ? (
+      ) : loading ? (
         <div className="center-page">
           <span className="spinner primary"></span>
           <p>Loading...</p>
         </div>
-      ) : isError && error instanceof Error ? (
+      ) : error ? (
         <div className="row">
           <div className="card large error">
             <section>
               <p>
                 <span className="icon-alert inverse "></span>
-                {error.message}
+                {error}
               </p>
             </section>
           </div>
@@ -70,4 +97,3 @@ function ProjectsPage() {
 }
 
 export default ProjectsPage;
-
